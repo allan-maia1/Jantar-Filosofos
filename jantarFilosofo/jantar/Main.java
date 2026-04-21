@@ -12,8 +12,8 @@ class Filosofo extends Thread {//extends Thread: Transforma a execução do codi
 
     public Filosofo(int id, Semaphore esquerdo, Semaphore direito) {//Construtor
         this.id = id;
-        if (id == 4) {//Condição para quebrar o Deadlock;O garfo à esquerda vira o direito; Quebra a ESPERA CIRCULAR: Filosofo 4
-																	//vai tentar pegar o garfo 0 primeiro (que ja está ocupado pelo Filosofo 0)
+        if (id == 4) {//Condição para quebrar o Deadlock;O ultimo filosofo tenta pegar Direita pra esquerda; Quebra a ESPERA CIRCULAR: Filosofo 4
+																	//tenta pegar o garfo 0 primeiro (que ja está ocupado pelo Filosofo 0)
 																	// e então fica Bloqueado, deixando liberado assim o garfo 4 para o Filosofo 3.
             this.garfoEsquerdo = direito;
             this.garfoDireito = esquerdo;
@@ -33,7 +33,7 @@ class Filosofo extends Thread {//extends Thread: Transforma a execução do codi
     @Override //Apenas para poder escrever o proprio metodo run(), não utilizar o padrao do compilador
     public void run() {//Método executado quando filosofo[i].start(); Criar as execuções para cada filosofo;
         try {
-            for (int i = 0; i < 5; i++) {//Filosofo executa o ciclo 5 vezes
+            for (int i = 0; i < 7; i++) {//Filosofo executa o ciclo 5 vezes
                 tempoTotalPensando += realizarAcao("PENSANDO");//O filosofo está em sleepPENSANDO por tempo aleatorio
 
                 System.out.println("Filósofo " + id + " está com FOME.");//Fica com fome e vai tentar pegar os garfos;
@@ -60,8 +60,9 @@ public class Main {
         Filosofo[] filosofos = new Filosofo[NUM_FILOSOFOS];
 
         for (int i = 0; i < NUM_FILOSOFOS; i++) {
-            garfos[i] = new Semaphore(1);//EXCLUSÃO MÚTUA: Semaphore(1) garante que somente um Filosofo pode 
-        }							     //usar um garfo especifico
+            garfos[i] = new Semaphore(1, true);//EXCLUSÃO MÚTUA: Semaphore(1) garante que somente um Filosofo pode 
+        }							     	   //usar um garfo especifico; E o true soluciona Starvation, cria uma Fila
+        									   //para as Threads ao tentarem pegar um garfo
         
 
 
