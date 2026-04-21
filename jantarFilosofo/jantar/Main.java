@@ -21,10 +21,10 @@ class Filosofo extends Thread {//extends Thread: Transforma a execução do codi
         }
     }
 
-    private long realizarAcao(String acao) throws InterruptedException {//Método que retorno o tempo que durou uma ação
+    private long realizarAcao(String acao) throws InterruptedException {//Método que retorn o tempo que durou uma ação
         long inicio = System.currentTimeMillis();//System.currentTimeMillis - Guarda o tempo ATUAL
         System.out.println("Filósofo " + id + " está " + acao + "...");
-        Thread.sleep((long) (Math.random() * 1000));
+        Thread.sleep((long) (Math.random() * 2000));//Tempo MAX que passa PENSANDO/COMENDO
         return (System.currentTimeMillis() - inicio);//Diferença entre inicio e currentTimeMillis = Tempo que passou
     }
 
@@ -72,8 +72,10 @@ public class Main {
         													//tenta pegar o garfo 0 primeiro (que ja está ocupado pelo Filosofo 0)
         													// e então fica Bloqueado, deixando liberado assim o garfo 4 para o Filosofo 3.
         try {
-            // Tempo de execução do main
-            Thread.sleep(10000); 
+        	for (int i = 0; i < NUM_FILOSOFOS; i++) {
+                // O main para nesta linha e espera a thread filosofos[i] "morrer"
+                filosofos[i].join();// .join() faz o main finalizar apenas qnd os filosofos terminarem o ciclo
+            }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
