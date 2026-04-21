@@ -31,7 +31,7 @@ class Filosofo extends Thread {//extends Thread: Transforma a execução do codi
     @Override //Apenas para poder escrever o proprio metodo run(), não utilizar o padrao do compilador
     public void run() {//Método executado quando filosofo[i].start(); Criar as execuções para cada filosofo;
         try {
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < 5; i++) {//Filosofo executa o ciclo 5 vezes
                 tempoTotalPensando += realizarAcao("PENSANDO");//O filosofo está em sleepPENSANDO por tempo aleatorio
 
                 System.out.println("Filósofo " + id + " está com FOME.");//Fica com fome e vai tentar pegar os garfos;
@@ -61,8 +61,6 @@ public class Main {
             garfos[i] = new Semaphore(1);//EXCLUSÃO MÚTUA: Semaphore(1) garante que somente um Filosofo pode 
         }							     //usar um garfo especifico
         
-
-
         System.out.println("--- O Jantar começou ---\n");
 
         for (int i = 0; i < NUM_FILOSOFOS; i++) {//Instanciando o objeto Filosofo
