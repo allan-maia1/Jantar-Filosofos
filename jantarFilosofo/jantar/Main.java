@@ -12,7 +12,9 @@ class Filosofo extends Thread {//extends Thread: Transforma a execução do codi
 
     public Filosofo(int id, Semaphore esquerdo, Semaphore direito) {//Construtor
         this.id = id;
-        if (id == 4) {//Condição para quebrar o Deadlock;O ultimo filosofo tenta pegar Direita pra esquerda
+        if (id == 4) {//Condição para quebrar o Deadlock;O garfo à esquerda vira o direito; Quebra a ESPERA CIRCULAR: Filosofo 4
+																	//vai tentar pegar o garfo 0 primeiro (que ja está ocupado pelo Filosofo 0)
+																	// e então fica Bloqueado, deixando liberado assim o garfo 4 para o Filosofo 3.
             this.garfoEsquerdo = direito;
             this.garfoDireito = esquerdo;
         } else {//Todos os outros filosofos tentam da Esquerda pra Direita
@@ -61,14 +63,14 @@ public class Main {
             garfos[i] = new Semaphore(1);//EXCLUSÃO MÚTUA: Semaphore(1) garante que somente um Filosofo pode 
         }							     //usar um garfo especifico
         
+
+
         System.out.println("--- O Jantar começou ---\n");
 
         for (int i = 0; i < NUM_FILOSOFOS; i++) {//Instanciando o objeto Filosofo
             filosofos[i] = new Filosofo(i, garfos[i], garfos[(i + 1) % NUM_FILOSOFOS]);//(num, esquerdo, direito)
-            filosofos[i].start();							//%5, no ultimo filosofo faz com que o garfo 0 seja 
-        }													//o da direita dele. Quebra a ESPERA CIRCULAR: Filosofo 4
-        													//tenta pegar o garfo 0 primeiro (que ja está ocupado pelo Filosofo 0)
-        													// e então fica Bloqueado, deixando liberado assim o garfo 4 para o Filosofo 3.
+            filosofos[i].start();							//%5, no ultimo filosofo faz com que o garfo 0 seja o da direta dele
+        }													
         try {
         	for (int i = 0; i < NUM_FILOSOFOS; i++) {
                 // O main para nesta linha e espera a thread filosofos[i] "morrer"
